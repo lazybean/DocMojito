@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <title>Mojito guide</title>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-
+    <script src="http://yui.yahooapis.com/3.10.0/build/yui/yui-min.js"></script>
     <!-- Combo with CSSNormalize, CSSGrids-Responsive, CSSForm, CSSTable, CSSList (v3.9.1) -->
     <link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.9.1/build/cssnormalize/cssnormalize-min.css&amp;3.9.1/build/cssgrids-responsive/cssgrids-responsive-min.css&amp;3.9.1/build/cssbutton/cssbutton-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-csslist/gallerycss-csslist-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-csstable/gallerycss-csstable-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-cssform/gallerycss-cssform-min.css">
 
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/gallery-2013.03.27-22-06/build/gallery-widget-pointer/assets/gallery-widget-pointer-core.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/gallery-2013.03.27-22-06/build/gallery-tipsy/assets/skins/sam/gallery-tipsy.css">
     <!-- Some custom styles to make things pretty. -->
     <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/prettypages/gh-pages/ui.css">
 
@@ -56,9 +58,9 @@
       <h2 id="articles">Articles</h2>
       <div class="yui3-menu yui3-menu-open yui3-menu-vertical">
         <ul>
-          <li><a href="articles/multiMojits.html">Give me more mojits</a></li>
-          <li><a href="articles/acDoneJSON.html">I'm done! But no mustache please!</a></li>
-          <li><a href="articles/clientVScommonVSserver.html">Three glasses: common, server and client</a></li>
+          <li rel="tipsy" data-content="Hello from everywhere: an example on how to include many mojits in your page, thanks to the composite addon"><a href="articles/multiMojits.html">Give me more mojits</a></li>
+          <!--li><a href="articles/acDoneJSON.html">I'm done! But no mustache please!</a></li -->
+          <!--li><a href="articles/clientVScommonVSserver.html">Three glasses: common, server and client</a></li-->
         </ul>
       </div>
       <h2 id="projects">Projects</h2>
@@ -67,39 +69,25 @@
           <li><a href="http://yootravel.herokuapp.com">Y!Hack london: yooTravel</a></li>
         </ul>
       </div>
-      <pre><code data-language="javascript">
-                                                                                                                                                                                                                                                                                                                                                                                   YUI().use('node', function(Y) {
-                                                                                                                                                                                                                                                                                                                                                                                         Y.log('YUI Loaded. Vroom vroom!');
-                                                                                                                                                                                                                                                                                                                                                                                             });
-
-                                                                                                                                                                                                                                                                                                                                                                                             </code></pre>
-
-      <p>You can also display nice looking buttons thanks to YUI's CSSButton module. Add the <code>.yui3-button</code> class to a <code>a</code> element to make a nice looking button, and add the <code>primary-button</code> class to make a really big callout button.</p>
-
-      <a class="yui3-button">Regular button</a>
-      <a class="yui3-button primary-button">Primary button</a>
-
-
-      <h2>More Content</h2>
-      <p>
-      In general, all your content should be placed inside a <code>div class="content"</code>. You can use <code>code</code> elements to highlight inline-code. If you want sub-headings, those are nicely styled too. 
-      </p>
-
-      <h3>A sub-heading</h3>
-
-      <p>
-      Use <code>h3</code> for subheadings! If you want something smaller, you can go for an <code>h4</code>.
-      </p>
-
-      <h4>A sub-sub heading</h4>
-      <p>That's what an <code>h4</code> looks like.</p>
-
-
       <!-- TYPEKIT -->
       <script type="text/javascript" src="//use.typekit.net/ajf8ggy.js"></script>
       <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
       <script src="https://rawgithub.com/ccampbell/rainbow/master/js/rainbow.min.js"></script>
       <script src="https://rawgithub.com/ccampbell/rainbow/master/js/language/generic.js"></script>
+
+      <script>
+      </script>
+      <script type="text/javascript">
+        YUI({
+          gallery: 'gallery-2013.03.27-22-06'
+        }).use('gallery-tipsy', function (Y) { 
+          var tipsy = new Y.Tipsy({
+            selector: "[rel='tipsy']"
+          });
+
+          tipsy.render();  
+        });
+      </script>
     </div>
   </body>
 </html>
