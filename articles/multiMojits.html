@@ -19,7 +19,7 @@
     <style>
 
       .header {
-        background: rgb(30, 255, 0);
+        background: rgb(30, 205, 10);
       }
       .header h1 {
         color: white;
@@ -56,14 +56,14 @@
       </p>
       <p>Can you say hello to Mars, the Underworld and the Middle Earth at the same time?</p>
       <p><a href="http://examplemojito-multimojit.herokuapp.com/">Yes, you can do that by using composite mojits.</a></p>
-      <p>A composite mojit is a mojit that has children, and render them inside its own view, by using the <a href="http://http://developer.yahoo.com/cocktails/mojito/api/classes/Composite.common.html"> ActionContext Composite Addon </a> </p>
+      <p>A composite mojit is a mojit that has children, and render them inside its own view, by using the <a href="http://developer.yahoo.com/cocktails/mojito/api/classes/Composite.common.html"> ActionContext Composite Addon </a> </p>
       <h3> One parent and his grand-parent </h3>
-      <p> In correct to have a complete HTML skeleton, we use the HTMLFrameMojit. This mojit can have only one direct child.
-      This direct will be a custom mojit Body that will get many children. 
-      In our example those children will be differents instances of a same mojit. We will use configuration to make them change a little bit.</p>
+      <p> In order to have a complete HTML skeleton, we use the HTMLFrameMojit. This mojit can have only one direct child.
+      This child will be a custom mojit Body that will get many children. 
+      In our example those children will be differents instances of a same mojit. We will use the configuration object to make them change a little bit.</p>
       <h2>Code</h2>
       <h3>Config</h3>
-      <p>In application.json we declare our three different mojits (the grand-parent, parent adn children). The children have the same type and only differs by there name and additional configuration. Every children will say hello from differents places.</p>
+      <p>In application.json we declare our three different mojits (the grand-parent, the parent and children). The children all have the same type and only differs by there name and additional configuration. Every children will say hello from differents places.</p>
       <p>application.json can look scary, be careful to have a valid json.
       Do not copy paste this one (comments are not valid JSON). You could also use YAML.
       <pre><code data-language="json">
@@ -71,13 +71,13 @@
   "settings": [ "master" ],
     "appPort": "8666",
     "specs": {
-      "multiMojitFrame": {
-        "type": "HTMLFrameMojit",
+      "multiMojitFrame": { //The name of the mojit. In template we reference to it, not the type
+        "type": "HTMLFrameMojit", //The grand-parent can only have one child.
         "config": {
           "title": "Hello from many places",
           "assets": {
             "top": {
-              "css":[
+              "css":[ //we include some css files at the top of the produced html file. This is a feature of the HTMLFrameMojit
                 "http://yui.yahooapis.com/combo?3.9.1/build/cssnormalize/cssnormalize-min.css&amp;3.9.1/build/cssgrids-responsive/cssgrids-responsive-min.css&amp;3.9.1/build/cssbutton/cssbutton-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-csslist/gallerycss-csslist-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-csstable/gallerycss-csstable-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-cssform/gallerycss-cssform-min.css",
               "https://rawgithub.com/tilomitra/prettypages/gh-pages/ui.css",
               "https://rawgithub.com/ccampbell/rainbow/master/themes/github.css",
@@ -86,18 +86,18 @@
             }
           },
           "child": {
-            "type": "body",
+            "type": "body", //The parent. He will contain many children.
             "config": {
               "children": {
-                "world": {
-                  "type": "helloMojit",
-                  "config":{
+                "world": { //again, this is the name. We will see it as {{{world}}} in the mustache template.
+                  "type": "helloMojit", //world is a helloMojit mojit, like his siblings.
+                  "config":{ //we can pass some config. parameters. Useful.
                     "helloClass": "world",
                     "what": "world"
                   }
                 },
                 "mars":{
-                  "type": "helloMojit",
+                  "type": "helloMojit", //Another helloMojit mojit.
                   "config":{
                     "helloClass": "mars",
                     "what": "mars"
@@ -106,14 +106,14 @@
                 "underWorld":{
                   "type": "helloMojit",
                   "config":{
-                    "helloClass": "underworld",
+                    "helloClass": "underworld",// Dracula may be there.
                     "what": "underworld"
                   }
                 },
                 "middleEarth":{
                   "type": "helloMojit",
                   "config":{
-                    "helloClass": "middleearth",
+                    "helloClass": "middleearth",// Gandalf will be there
                     "what": "middleearth"
                   }
                 }
@@ -131,16 +131,27 @@
   }
 }]
 </code></pre>
-
-      <h3> Ingredients </h3>
+      <p> It is necessary to setup a route. We will tell that our root path "/" goes to the "HTMLFrameMojit.index" action. It is a quite common setup for simple app (but you may setup more routes thant this one).</p>
+<p>Again, be careful with the syntax.</p>
+      <pre><code data-language="json">
+[{
+  "settings": [ "master" ],
+    "multiMojitFrame": {
+      "path": "/",
+      "verb": ["GET"],
+      "call": "multiMojitFrame.index" //The index method of the multiMojitFrame (an HTMLFrameMojit)  controller will be called.
+    }
+}]
+</code></pre>
+    <h3> Ingredients </h3>
       <p> HTMLFrameMojit being kindly offered by our Y! friends (yahoo open bar!), we only need to create the body mojit and the helloMojit mojit.
       <pre><code data-language="bash">
       mojito create mojit body
       mojito create mojit helloMojit
       </code></pre>
       <h4>Body: the composite parent</h4>
-      <p>We will change the default controller and views, and drop the model.</p>
-      <p>The controller needs to use de mojito-composite-addon in order to execute and render its children. That's all.</p>
+      <p>We will change the default controller and view, and drop the model.</p>
+      <p>The controller needs to use the mojito-composite-addon in order to execute and render its children. That's all.</p>
       <p>We include the mojito-composite-addon by including it in the 'requires' array. Then instead of useing "ac.done" we call "ac.composite.done".
 
       <pre><code data-language="javascript">
@@ -155,7 +166,7 @@ YUI.add('body', function(Y, NAME) {
 
 }, '0.0.1', {requires: ['mojito', 'mojito-composite-addon']});
     </code></pre>
-      <p>The view will be the chrome of our app, the markup that surrounds or childrend mojits. If you want to give your page a general structure/interactivity (grid, DnD, animation) that is not mojit specific,  you will do it here.</p>
+      <p>The view will be the chrome of our app, the markup that surrounds or childrend mojits. If you want to give your page a general structure (grid) that is not mojit specific,  you will do it here.</p>
       <p>In the mustache template, you will include the mojits by putting their name (as defined in application.json) between triple curly braces.</p>
       <p>The following shows a centered responsive yui3 grid (2X2), containing 4 mojits.</p>
 <pre><code data-language="html"><div id="{{mojit_view_id}}" style="width: 80%; margin: auto;"> <!--All your mojit should be wrapped in a div with the {{mojit_view_id}} as id -->
@@ -164,8 +175,8 @@ YUI.add('body', function(Y, NAME) {
     <div class="yui3-u-1-2">{{{mars}}}</div>
   </div>
   <div class="yui3-g-r">
-    <div class="yui3-u-1-2">{{{middleEarth}}}</div> <!--Gandalf will be there -->
-    <div class="yui3-u-1-2">{{{underWorld}}}</div> <!-- Dracula may be there. -->
+    <div class="yui3-u-1-2">{{{middleEarth}}}</div>
+    <div class="yui3-u-1-2">{{{underWorld}}}</div> 
   </div>
 </div>
 </code></pre>
@@ -181,7 +192,7 @@ YUI.add('helloMojit', function(Y, NAME) {
                 var helloClass = ac.config.get('helloClass') || 'defaultHello',
                   what = ac.config.get('what') || 'world!';
                 ac.assets.addCss('./index.css');
-                ac.done({
+                ac.done({ //the data we pass to the view
                   "helloClass": helloClass,
                   "what": what
                 });
@@ -190,7 +201,14 @@ YUI.add('helloMojit', function(Y, NAME) {
 //'requires' is an array of modules/addons we need in the controller.
 }, '0.0.1', {requires: ['mojito', 'mojito-assets-addon', 'mojito-config-addon']});
       </code></pre>
-
+      <p>
+      The view is pretty simple too, the class and the text will change with the data given by the controller.
+      Again, the whole mojit is wrapped in a div with a special id.
+      </p>
+      <pre> <code data-language="html"><div id="{{mojit_view_id}}" class="{{helloClass}} helloMojit">
+  Hello {{what}}
+</div></code></pre>
+      <p>Et voilà!</p>
       <h2>Links</h2>
       <div class="yui3-menu yui3-menu-open yui3-menu-vertical">
         <ul>
