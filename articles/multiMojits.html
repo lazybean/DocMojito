@@ -221,6 +221,8 @@ YUI.add('helloMojit', function(Y, NAME) {
   Hello {{what}}
 </div></code></pre>
       <p>Start it, browse it, et voilà!</p>
+      <h2>Warnings</h2>
+      <p>The 'ac.composite.done' method  executes the action specified in the 'action' property of child config, or , if none, the 'index' action. But not the current command action. You need to be aware of that when setting up your routes.</p>
       <h2>Links</h2>
       <div class="yui3-menu yui3-menu-open yui3-menu-vertical">
         <ul>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>NoMustache</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+
+    <!-- Combo with CSSNormalize, CSSGrids-Responsive, CSSForm, CSSTable, CSSList (v3.9.1) -->
+    <link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.9.1/build/cssnormalize/cssnormalize-min.css&amp;3.9.1/build/cssgrids-responsive/cssgrids-responsive-min.css&amp;3.9.1/build/cssbutton/cssbutton-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-csslist/gallerycss-csslist-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-csstable/gallerycss-csstable-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-cssform/gallerycss-cssform-min.css">
+
+    <!-- Some custom styles to make things pretty. -->
+    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/prettypages/gh-pages/ui.css">
+
+    <!-- RainbowJS Syntax Highlighting - Github Theme. 
+    For more themes, go to https://github.com/ccampbell/rainbow/tree/master/themes -->
+    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/ccampbell/rainbow/master/themes/github.css">
+
+    <!-- Modify header colors here to customize the look and feel of the site-->
+    <style>
+
+      .header {
+        background: rgb(30, 180, 30);
+      }
+      .header h1 {
+        color: white;
+      }
+      .header h2 {
+        font-weight:300;
+        margin:0;
+        color: rgb(116, 130, 230);
+      }
+    </style>
+
+  </head>
+
+  <body class='yui3-skin-sam'>
+
+    <div id="headerMenu" class="yui3-menu yui3-menu-open yui3-menu-horizontal yui3-menu-fixed">
+      <span class="yui3-menu-heading">Drink and enjoy mojito</span>
+      <ul>
+        <li class="yui3-menu-active"><a href="http://lazybean.github.com/DocMojito/">Home</a></li>
+        <li><a href="http://lazybean.github.com/DocMojito#articles">Articles</a></li>
+        <li><a href="http://lazybean.github.com/DocMojito#projects">Projects</a></li>
+      </ul>
+    </div>
+    <div class="header yui3-u-1">
+
+      <h1 class="yui3-u-1">No more mustache please</h1>
+      <h2 class="yui3-u">How to send raw response without view rendering step.</h2>
+
+    </div>
+    <div class="content">
+      <h3>Introduction</h3>
+      <p>In some case you want your controller to return data in other format than html (from mustache or handlebar), like xml or json.</p>
+      <p>You have at least two different way of doing it.</p>
+      <p>If the only argument of ac.done is a string, then it will be returned as it. No template rendering or other thransformation. Then you could stringify your JSON.</p>
+<pre><code data-language="javascript"> 
+//If the first argument of ac.done is not an object, it will be the direct answer (no template render).
+ac.done(Y.JSON.stringify(response));
+</pre></code>
+<pre><code data-language="javascript"> 
+//We have to parse the string response in the binder invokation callback
+Y.JSON.parse(response));
+</pre></code>
+Another way, would be to tell ac.done that we want to use a serializer (JSON or XML), using the second argument.
+Usually the second argument is the name of the template used. But, there is actually a check to determine if it actually is a serializer instead.
+<pre><code data-language="javascript">
+            /* This code comes from action-context.common.js
+            * You can see that 'meta' the second argument of the 'done' method
+            * can be either a serializer or a template name.
+            */
+            if (Y.Lang.isString(meta)) {
+                // If the meta string is a serializer set it
+                if (serializer[meta]) {
+                    meta = {
+                        serialize: meta
+                    };
+                } else {// Otherwise we think it is a template name
+                    meta = {
+                        view: {name: meta}
+                    };
+                }
+            }
+
+</code></pre>
+<pre><code data-language="javascript"> 
+//usually the second argument is a view name. But 'json' will be a serializer.
+ac.done(response, 'json');
+</pre></code>
+<pre><code data-language="javascript"> 
+//in the binder invokation callback, response is already JSON
+node.set('innerHTML', response.questionOfLifeUniverseAndEverything);
+
+</pre></code>
+
+<!-- TYPEKIT -->
+<script type="text/javascript" src="//use.typekit.net/ajf8ggy.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script src="https://rawgithub.com/ccampbell/rainbow/master/js/rainbow.min.js"></script>
+<script src="https://rawgithub.com/ccampbell/rainbow/master/js/language/generic.js"></script>
+
+
